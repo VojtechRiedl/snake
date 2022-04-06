@@ -147,9 +147,4 @@ namespace snake
             }
         }
     }
-
-    public class snakebody
-        {
-            
-        }
 }
