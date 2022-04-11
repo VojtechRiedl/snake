@@ -10,6 +10,7 @@ namespace snake
         private string smer = "right";
         private int pocet = 20;
         private int pocetJidla = 0;
+        private int rychlost = 500;
         public Form1()
         {
             InitializeComponent();
@@ -17,11 +18,11 @@ namespace snake
         }
         public void create()
         {
-            if (pocetJidla < 3)
+            if (pocetJidla < this.Width*this.Height/20)
             {
                 PictureBox jidlo = new PictureBox();
                 jidlo.Size = new Size(20, 20);
-                jidlo.Location = new Point(randomPozice(this.Width), randomPozice(this.Height));
+                jidlo.Location = new Point(randomPozice(this.Width - 20), randomPozice(this.Height - 20));
                 jidlo.BackColor = Color.Black;
                 jidlo.BackgroundImage = Properties.Resources.apple1;
                 jidlo.BackgroundImageLayout = ImageLayout.Stretch;
@@ -56,13 +57,16 @@ namespace snake
             }
         }
 
-        public bool prohra()
+        public void prohra()
         {
-            if (hlava.Left >= this.Width || hlava.Left < 0 || hlava.Top >= this.Height || hlava.Top < 0)
+            if (hlava.Left >= this.Width || hlava.Left < 0 || hlava.Top >= this.Height || hlava.Top < 0)  this.Close();
+            else
             {
-                return true;
+                for (int i = 1; i < snake.Count; i++)
+                {
+                    if (hlava.Left == snake[i].Left && hlava.Top == snake[i].Top) this.Close();
+                }
             }
-            return false;
         }
         private void papani()
         {
@@ -74,6 +78,7 @@ namespace snake
                     pridat(jidloAR[i].Left, jidloAR[i].Top);
                     jidloAR.RemoveAt(i);
                     pocetJidla--;
+                    rychlost -= 20;
                 }
             }
         }
@@ -102,6 +107,7 @@ namespace snake
                 x = z;
                 y = l;
             }
+            prohra();
         }
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -110,16 +116,12 @@ namespace snake
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (prohra())
-            {
-                this.Close();
-            }
-            else
-            {
-                moveSnake();
-                create();
-                papani();
-            }
+            create();
+
+            moveSnake();
+            papani();
+            
+            if (rychlost > 20) timer1.Interval = rychlost;
         }
 
         private void Form1_Load(object sender, EventArgs e)
