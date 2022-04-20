@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS8618: Pole, které nemůže být null, musí při ukončování konstruktoru obsahovat hodnotu, která není null. Zvažte možnost deklarovat ho jako pole s možnou hodnotou null.
+dotnet_diagnostic.CS8618.severity = none
